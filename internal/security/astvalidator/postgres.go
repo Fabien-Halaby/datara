@@ -10,10 +10,10 @@ import (
 
 // PostgresValidator enforces a domain.SecurityPolicy against Postgres SQL
 // by parsing each query into its AST via libpg_query (through
-// pg_query_go) the same parser Postgres itself uses. This is what makes
+// pg_query_go) — the same parser Postgres itself uses. This is what makes
 // the read-only guarantee robust: Datara isn't pattern-matching keywords
 // in a string, it's reading the actual parse tree Postgres would produce.
-type PostgresValidator struct{
+type PostgresValidator struct {
 	policy domain.SecurityPolicy
 }
 
@@ -25,21 +25,21 @@ func NewPostgresValidator(policy domain.SecurityPolicy) *PostgresValidator {
 // Validate parses raw and rejects anything that is not a single,
 // side-effect-free SELECT statement.
 func (v *PostgresValidator) Validate(raw string) (domain.SQLQuery, error) {
-	query := domain.NewSQLQuery(raw)
-	if query.IsZero() {
-		return domain.SQLQuery{}, domain.ErrEmptyQuery
+	query, err := domain.NewSQLQuery(raw)
+	if err != nil {
+		return domain.SQLQuery{}, err
 	}
 
 	result, err := pgquery.Parse(query.Raw())
 	if err != nil {
-		return domain.SQLQuery{}, err
+		return domain.SQLQuery{}, fmt.Errorf("invalid SQL: %w", err)
 	}
 
 	if len(result.Stmts) != 1 {
 		return domain.SQLQuery{}, fmt.Errorf("only a single statement is allowed per query")
 	}
 
-	selectStmt := result.Stmts[0].GetSelectStmt()
+	selectStmt := result.Stmts[0].Stmt.GetSelectStmt()
 	if selectStmt == nil {
 		return domain.SQLQuery{}, fmt.Errorf("only SELECT statements are allowed")
 	}
@@ -68,7 +68,7 @@ func (v *PostgresValidator) Validate(raw string) (domain.SQLQuery, error) {
 // returns the table names it references. This is a best-effort v1
 // implementation: it covers plain FROM/JOIN targets, not every possible
 // range expression (subqueries and CTEs are not resolved to table names
-// here a future iteration can walk WithClause too).
+// here — a future iteration can walk WithClause too).
 func extractTableNames(stmt *pgquery.SelectStmt) []string {
 	var tables []string
 	for _, node := range stmt.FromClause {
@@ -76,6 +76,5 @@ func extractTableNames(stmt *pgquery.SelectStmt) []string {
 			tables = append(tables, rv.Relname)
 		}
 	}
-
 	return tables
 }
