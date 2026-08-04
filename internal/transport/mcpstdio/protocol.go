@@ -2,8 +2,7 @@ package mcpstdio
 
 import "encoding/json"
 
-// Request is a JSON-RPC 2.0 request or notification (notifications omit
-// ID).
+// Request is a JSON-RPC 2.0 request or notification (notifications omit ID).
 type Request struct {
 	JSONRPC string          `json:"jsonrpc"`
 	ID      json.RawMessage `json:"id,omitempty"`
