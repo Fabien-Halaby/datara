@@ -31,8 +31,8 @@ type logLine struct {
 	Timestamp  time.Time `json:"timestamp"`
 }
 
-func (l *JSONLineLogger) LogBlocked(event domain.QueryBlockedEvent) {
-	l.write(logLine{
+func (l *JSONLineLogger) LogBlocked(event domain.QueryBlockedEvent) error {
+	return l.write(logLine{
 		Type:      "blocked",
 		Query:     event.Query,
 		Reason:    event.Reason,
@@ -40,8 +40,8 @@ func (l *JSONLineLogger) LogBlocked(event domain.QueryBlockedEvent) {
 	})
 }
 
-func (l *JSONLineLogger) LogExecuted(event domain.QueryExecutedEvent) {
-	l.write(logLine{
+func (l *JSONLineLogger) LogExecuted(event domain.QueryExecutedEvent) error {
+	return l.write(logLine{
 		Type:       "executed",
 		Query:      event.Query,
 		RowCount:   event.RowCount,
@@ -50,11 +50,12 @@ func (l *JSONLineLogger) LogExecuted(event domain.QueryExecutedEvent) {
 	})
 }
 
-func (l *JSONLineLogger) write(line logLine) {
+func (l *JSONLineLogger) write(line logLine) error {
 	b, err := json.Marshal(line)
 	if err != nil {
-		return
+		return err
 	}
 	b = append(b, '\n')
-	_, _ = l.out.Write(b)
+	_, err = l.out.Write(b)
+	return err
 }
