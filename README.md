@@ -1,6 +1,6 @@
 # 🛡️ Datara
 
-**Enterprise MCP Data Gateway a Zero-Trust bridge between AI agents and your private databases.**
+**Enterprise MCP Data Gateway — a Zero-Trust bridge between AI agents and your private databases.**
 
 [![Go Version](https://img.shields.io/badge/Go-1.26-00ADD8?style=flat&logo=go)](https://go.dev)
 [![MCP](https://img.shields.io/badge/Protocol-MCP-8A2BE2?style=flat)](https://modelcontextprotocol.io)
@@ -16,7 +16,7 @@ Datara sits between AI agents (Claude, ChatGPT, Cursor, …) and your company's 
 
 Companies want to let AI agents explore their production data. But two things stand in the way:
 
-- **Databases are locked inside private networks** an LLM running in the cloud has no direct path to a Postgres instance sitting behind a corporate firewall.
+- **Databases are locked inside private networks** — an LLM running in the cloud has no direct path to a Postgres instance sitting behind a corporate firewall.
 - **Letting a language model run raw SQL is dangerous.** A single hallucinated `DELETE` or `DROP` can destroy data that took years to accumulate.
 
 ## The solution
@@ -53,7 +53,7 @@ flowchart TD
     D --> F[(Private PostgreSQL database)]
 ```
 
-Every query whether it's allowed or rejected is written to the audit log. Nothing bypasses the security core; the datasource layer only ever receives queries that have already been validated.
+Every query — whether it's allowed or rejected — is written to the audit log. Nothing bypasses the security core; the datasource layer only ever receives queries that have already been validated.
 
 ---
 
@@ -68,11 +68,11 @@ go mod tidy
 go build -o bin/datara-cli ./cmd/datara/cli
 ```
 
-> `pg_query_go` uses cgo (it embeds `libpg_query`, written in C) make sure `gcc`/`build-essential` is installed.
+> `pg_query_go` uses cgo (it embeds `libpg_query`, written in C) — make sure `gcc`/`build-essential` is installed.
 
 ### 2. Spin up a sample database (optional)
 
-A ready-to-use `docker-compose.yml` seeds a Postgres instance with ~110,000 rows across `customers`, `products`, and `orders` enough to test real-world query patterns.
+A ready-to-use `docker-compose.yml` seeds a Postgres instance with ~110,000 rows across `customers`, `products`, and `orders` — enough to test real-world query patterns.
 
 ```bash
 docker-compose up -d
@@ -113,20 +113,20 @@ Then try to break it:
 
 > *"Delete all cancelled orders from the database."*
 
-Datara rejects the query before it ever touches Postgres while your AI agent gets a clear, actionable error message instead of a silent failure.
+Datara rejects the query before it ever touches Postgres — while your AI agent gets a clear, actionable error message instead of a silent failure.
 
 ---
 
 ## Security model
 
-Datara's security guarantee doesn't rely on pattern-matching keywords in a string that approach is trivially bypassed with comments, whitespace tricks, or alternate SQL syntax. Instead, every incoming query is:
+Datara's security guarantee doesn't rely on pattern-matching keywords in a string — that approach is trivially bypassed with comments, whitespace tricks, or alternate SQL syntax. Instead, every incoming query is:
 
 1. Parsed into a real Postgres AST using [`pg_query_go`](https://github.com/pganalyze/pg_query_go) (a Go wrapper around `libpg_query`, the same C library Postgres itself uses to parse SQL).
 2. Rejected outright unless the parse tree contains **exactly one `SELECT` statement**.
-3. Further checked for side-effect-bearing constructs even within a `SELECT`, `SELECT ... INTO` (which creates a table) and locking clauses (`FOR UPDATE`/`FOR SHARE`) are blocked.
+3. Further checked for side-effect-bearing constructs even within a `SELECT` — `SELECT ... INTO` (which creates a table) and locking clauses (`FOR UPDATE`/`FOR SHARE`) are blocked.
 4. Optionally checked against a table allowlist, if one is configured in the active `SecurityPolicy`.
 
-Every decision allow or block is recorded in the audit log with a timestamp and the reason for rejection.
+Every decision — allow or block — is recorded in the audit log with a timestamp and the reason for rejection.
 
 ---
 
