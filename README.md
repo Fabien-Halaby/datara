@@ -1,6 +1,6 @@
 # 🛡️ Datara
 
-**Enterprise MCP Data Gateway; a Zero-Trust bridge between AI agents and your private databases.**
+**Enterprise MCP Data Gateway — a Zero-Trust bridge between AI agents and your private databases.**
 
 [![Go Version](https://img.shields.io/badge/Go-1.26-00ADD8?style=flat&logo=go)](https://go.dev)
 [![MCP](https://img.shields.io/badge/Protocol-MCP-8A2BE2?style=flat)](https://modelcontextprotocol.io)
@@ -8,7 +8,7 @@
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.md)
 [![Status](https://img.shields.io/badge/status-MVP-orange)]()
 
-Datara sits between AI agents (Claude, ChatGPT, Cursor, …) and your company's private databases. It speaks the [Model Context Protocol](https://modelcontextprotocol.io) on one side and raw SQL on the other and in between, it guarantees that **no AI-generated query can ever modify your data**.
+Datara sits between AI agents (Claude, ChatGPT, Cursor, …) and your company's private databases. It speaks the [Model Context Protocol](https://modelcontextprotocol.io) on one side and raw SQL on the other — and in between, it guarantees that **no AI-generated query can ever modify your data**.
 
 ---
 
@@ -16,12 +16,12 @@ Datara sits between AI agents (Claude, ChatGPT, Cursor, …) and your company's 
 
 Companies want to let AI agents explore their production data. But two things stand in the way:
 
-- **Databases are locked inside private networks** an LLM running in the cloud has no direct path to a Postgres instance sitting behind a corporate firewall.
+- **Databases are locked inside private networks** — an LLM running in the cloud has no direct path to a Postgres instance sitting behind a corporate firewall.
 - **Letting a language model run raw SQL is dangerous.** A single hallucinated `DELETE` or `DROP` can destroy data that took years to accumulate.
 
 ## The solution
 
-Datara runs as a single lightweight binary, deployed as close to the data as possible (locally, or on the company's private server). It exposes the database through the standard MCP protocol while parsing and validating **every single query at the AST level** not with regex or keyword blacklists, but by walking the real SQL parse tree Postgres itself would produce. Anything that isn't a clean `SELECT` is rejected before it ever reaches the database.
+Datara runs as a single lightweight binary, deployed as close to the data as possible (locally, or on the company's private server). It exposes the database through the standard MCP protocol while parsing and validating **every single query at the AST level** — not with regex or keyword blacklists, but by walking the real SQL parse tree Postgres itself would produce. Anything that isn't a clean `SELECT` is rejected before it ever reaches the database.
 
 ---
 
@@ -44,7 +44,7 @@ flowchart TD
     A["AI agent<br/>(Claude, Cursor, ChatGPT)"] -->|MCP over stdio| B[Transport layer]
 
     subgraph Datara["Datara — single Go binary"]
-        B --> C["Security core<br/>AST validator SELECT only"]
+        B --> C["Security core<br/>AST validator — SELECT only"]
         C -->|allowed| D["Datasource<br/>Postgres driver"]
         C -->|blocked| E["Audit log<br/>JSON lines → stderr"]
         D --> E
