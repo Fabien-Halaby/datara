@@ -15,7 +15,7 @@ type DataSource interface {
 	Ping(ctx context.Context) error
 
 	// Execute runs an already-validated query and returns its result.
-	Excute(ctx context.Context, query domain.SQLQuery) (domain.QueryResult, error)
+	Execute(ctx context.Context, query domain.SQLQuery) (domain.QueryResult, error)
 
 	// Close releases any resources held by the data source.
 	Close()

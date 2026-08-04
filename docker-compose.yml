@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: datara-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: datara
+      POSTGRES_PASSWORD: datara
+      POSTGRES_DB: datara
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/init:/docker-entrypoint-initdb.d
+      - datara-pgdata:/var/lib/postgresql/data
+
+volumes:
+  datara-pgdata:
