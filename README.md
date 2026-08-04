@@ -5,7 +5,7 @@
 [![Go Version](https://img.shields.io/badge/Go-1.26-00ADD8?style=flat&logo=go)](https://go.dev)
 [![MCP](https://img.shields.io/badge/Protocol-MCP-8A2BE2?style=flat)](https://modelcontextprotocol.io)
 [![PostgreSQL](https://img.shields.io/badge/Postgres-supported-336791?style=flat&logo=postgresql&logoColor=white)](https://www.postgresql.org)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.md)
 [![Status](https://img.shields.io/badge/status-MVP-orange)]()
 
 Datara sits between AI agents (Claude, ChatGPT, Cursor, …) and your company's private databases. It speaks the [Model Context Protocol](https://modelcontextprotocol.io) on one side and raw SQL on the other — and in between, it guarantees that **no AI-generated query can ever modify your data**.
