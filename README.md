@@ -1,6 +1,6 @@
 # 🛡️ Datara
 
-**Enterprise MCP Data Gateway — a Zero-Trust bridge between AI agents and your private databases.**
+**Enterprise MCP Data Gateway a Zero-Trust bridge between AI agents and your private databases.**
 
 [![Go Version](https://img.shields.io/badge/Go-1.26-00ADD8?style=flat&logo=go)](https://go.dev)
 [![MCP](https://img.shields.io/badge/Protocol-MCP-8A2BE2?style=flat)](https://modelcontextprotocol.io)
@@ -16,7 +16,7 @@ Datara sits between AI agents (Claude, ChatGPT, Cursor, …) and your company's 
 
 Companies want to let AI agents explore their production data. But two things stand in the way:
 
-- **Databases are locked inside private networks** — an LLM running in the cloud has no direct path to a Postgres instance sitting behind a corporate firewall.
+- **Databases are locked inside private networks** an LLM running in the cloud has no direct path to a Postgres instance sitting behind a corporate firewall.
 - **Letting a language model run raw SQL is dangerous.** A single hallucinated `DELETE` or `DROP` can destroy data that took years to accumulate.
 
 ## The solution
