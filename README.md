@@ -10,6 +10,8 @@
 
 Datara sits between AI agents (Claude, ChatGPT, Cursor, …) and your company's private databases. It speaks the [Model Context Protocol](https://modelcontextprotocol.io) on one side and raw SQL on the other — and in between, it guarantees that **no AI-generated query can ever modify your data**.
 
+https://github.com/user-attachments/assets/f586f61e-7000-4e39-b8ea-1808e3dc6bcc
+
 ---
 
 ## The problem
